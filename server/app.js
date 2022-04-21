@@ -14,13 +14,19 @@ app.use(express.urlencoded({ extended : false }));
 // create
 app.post('/insert', (request, response) => {
     const { name } = request.body;
+    const { age } = request.body;
+    
+    
     const db = dbService.getDbServiceInstance();
     
-    const result = db.insertNewName(name);
+    const result = db.insertNewName(name,age);
+    
 
     result
     .then(data => response.json({ data: data}))
     .catch(err => console.log(err));
+    
+    
 });
 
 // read
@@ -32,7 +38,7 @@ app.get('/getAll', (request, response) => {
     result
     .then(data => response.json({data : data}))
     .catch(err => console.log(err));
-})
+});
 
 // update
 app.patch('/update', (request, response) => {
@@ -67,9 +73,13 @@ app.get('/search/:name', (request, response) => {
     result
     .then(data => response.json({data : data}))
     .catch(err => console.log(err));
-})
+});
 
-app.listen(process.env.PORT, () => console.log('app is running'));
+
+
+
+
+app.listen(process.env.PORT, () => console.log('app is running')); // Savoir si le serveur local tourne 
 
 
 

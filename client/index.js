@@ -48,7 +48,7 @@ function handleEditRow(id) {
 
 updateBtn.onclick = function() {
     const updateNameInput = document.querySelector('#update-name-input');
-
+    
 
     console.log(updateNameInput);
 
@@ -59,7 +59,7 @@ updateBtn.onclick = function() {
         },
         body: JSON.stringify({
             id: updateNameInput.dataset.id,
-            name: updateNameInput.value
+            name: updateNameInput.value 
         })
     })
     .then(response => response.json())
@@ -73,24 +73,33 @@ updateBtn.onclick = function() {
 
 const addBtn = document.querySelector('#add-name-btn');
 
-addBtn.onclick = function () {
+addBtn.onclick = function () {       // Action du bouton Ajouter // 
     const nameInput = document.querySelector('#name-input');
+    const ageInput  = document.querySelector('#age-input');
+    
     const name = nameInput.value;
+    const age = ageInput.value;
+   
     nameInput.value = "";
+    ageInput.value  = "";
+    console.log(nameInput.value);
 
-    fetch('http://localhost:5000/insert', {
+    fetch('http://localhost:5000/insert', { // Envoie les données au backend // 
         headers: {
             'Content-type': 'application/json'
         },
         method: 'POST',
-        body: JSON.stringify({ name : name})
+        body: JSON.stringify({ name : name, age : age})
+        
+        
     })
     .then(response => response.json())
     .then(data => insertRowIntoTable(data['data']));
+    
 }
 
 function insertRowIntoTable(data) {
-    console.log(data);
+    
     const table = document.querySelector('table tbody');
     const isTableData = table.querySelector('.no-data');
 
@@ -118,22 +127,23 @@ function insertRowIntoTable(data) {
     }
 }
 
-function loadHTMLTable(data) {
+function loadHTMLTable(data) {    
     const table = document.querySelector('table tbody');
 
-    if (data.length === 0) {
+    if (data.length === 0) {                            // Retourne "Aucun Résultat" si il n'ya a pas de donnée //
         table.innerHTML = "<tr><td class='no-data' colspan='5'>Aucun résultat</td></tr>";
         return;
     }
 
     let tableHtml = "";
 
-    data.forEach(function ({id, name, date_added}) {
+    data.forEach(function ({id, name, groupe,  date_added, age}) {   // Retourne les données s'il y en a //
         
-        tableHtml += "<tr>";
-        
+        tableHtml += "<tr class>";
         tableHtml += `<td>${name}</td>`;
+        tableHtml += `<td>${groupe}</td>`;
         tableHtml += `<td>${new Date(date_added).toLocaleString()}</td>`;
+        tableHtml += `<td>${age}</td>`;
         tableHtml += `<td><button class="delete-row-btn" data-id=${id}>Supprimer</td>`;
         tableHtml += `<td><button class="edit-row-btn"  data-id=${id}>Modifier</td>`;
         tableHtml += "</tr>";
@@ -142,3 +152,4 @@ function loadHTMLTable(data) {
     table.innerHTML = tableHtml;
     
 }
+

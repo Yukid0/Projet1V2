@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 let instance = null;
 dotenv.config();
 
-const connection = mysql.createConnection({
+const connection = mysql.createConnection({  // Connexion BDD
     host: process.env.HOST,
     user: process.env.USER,
     password: process.env.PASSWORD,
@@ -11,7 +11,7 @@ const connection = mysql.createConnection({
     port: process.env.DB_PORT
 });
 
-connection.connect((err) => {
+connection.connect((err) => {               // Erreur de connexion
     if (err) {
         console.log(err.message);
     }
@@ -19,9 +19,9 @@ connection.connect((err) => {
 });
 
 
-class DbService {
+class DbService {    // Contiens les fonctions qu'on utilisera pour GET/UPDATE/INSERT ou DELETE les données
     static getDbServiceInstance() {
-        return instance ? instance : new DbService();
+        return instance ? instance : new DbService(); // Créé s'il n'y en a pas, une nouvelle instance de DbService
     }
 
     async getAllData() {
@@ -42,13 +42,29 @@ class DbService {
     }
 
 
-    async insertNewName(name) {
+    async insertNewName(name,age) {
         try {
+                let groupe;
+                if (age >= 18) {
+                    groupe = "Séniors";
+                } else if (age >= 16) {
+                    groupe = "Juniors";
+                } else if (age >= 14) {
+                    groupe = "Cadets";
+                }else if (age >= 12) {
+                    groupe = "Minimes";
+                }else if (age >= 10) {
+                    groupe = "Benjamins";
+                }else if (age >= 8) {
+                    groupe = "Poussins";
+                }
+
+            
             const dateAdded = new Date();
             const insertId = await new Promise((resolve, reject) => {
-                const query = "INSERT INTO names (name, date_added) VALUES (?,?);";
+                const query = "INSERT INTO names (name, date_added, age, groupe) VALUES (?,?,?,?);";
 
-                connection.query(query, [name, dateAdded] , (err, result) => {
+                connection.query(query, [name, dateAdded, age, groupe] , (err, result) => {
                     if (err) reject(new Error(err.message));
                     resolve(result.insertId);
                 })
@@ -56,7 +72,10 @@ class DbService {
             return {
                 id : insertId,
                 name : name,
-                dateAdded : dateAdded
+                dateAdded : dateAdded,
+                age : age,
+                groupe : groupe,
+                
             };
         } catch (error) {
             console.log(error);
@@ -117,6 +136,10 @@ class DbService {
             console.log(error);
         }
     }
+    
+    
 }
 
 module.exports = DbService;
+
+

@@ -19,17 +19,22 @@ body{
 }
 
 table {
+    width: 100%;
     margin: 50px auto;
+    
 }
 
 table, th ,th {
     border-collapse: collapse;
     border: 1px solid #000;
+    background-color: white;
 }
 
 th, td {
     padding : 5px;
 }
+
+
 
 /* BOUTONS */
 
@@ -38,7 +43,6 @@ th, td {
     background: none;
     border: none;
     outline: none;
-  
     padding: 8px 16px;
     border-radius: 8px;
     color: #212121;
@@ -65,7 +69,10 @@ th, td {
   
 /* BARRE DE NAVIGATION*/
 
+
+
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+
 
 nav{
   display: flex;
@@ -78,6 +85,7 @@ nav{
   flex-wrap: wrap;
   top:0;
   position: fixed;
+  z-index:1;
 }
 nav .logo{
   color: #fff;
