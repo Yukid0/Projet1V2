@@ -24,7 +24,7 @@ class DbService {    // Contiens les fonctions qu'on utilisera pour GET/UPDATE/I
         return instance ? instance : new DbService(); // Créé s'il n'y en a pas, une nouvelle instance de DbService
     }
 
-    async getAllData() {
+    async getAllAData() {
         try {
             const response = await new Promise((resolve, reject) => {
                 const query = "SELECT * FROM names;";
@@ -41,41 +41,110 @@ class DbService {    // Contiens les fonctions qu'on utilisera pour GET/UPDATE/I
         }
     }
 
-
-    async insertNewName(name,age) {
+    async getAllPData() {
         try {
-                let groupe;
-                if (age >= 18) {
-                    groupe = "Séniors";
-                } else if (age >= 16) {
-                    groupe = "Juniors";
-                } else if (age >= 14) {
-                    groupe = "Cadets";
-                }else if (age >= 12) {
-                    groupe = "Minimes";
-                }else if (age >= 10) {
-                    groupe = "Benjamins";
-                }else if (age >= 8) {
-                    groupe = "Poussins";
-                }
+            const response = await new Promise((resolve, reject) => {
+                const query = "SELECT * FROM prof;";
 
-            
+                connection.query(query, (err, results) => {
+                    if (err) reject(new Error(err.message));
+                    resolve(results);
+                })
+            });
+            // console.log(response);
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+    async insertNewAdherent(name, age) {
+        console.log('toto');
+        try {
+            let groupe;
+            if (age >= 18) {
+                groupe = "Séniors";
+            } else if (age >= 16) {
+                groupe = "Juniors";
+            } else if (age >= 14) {
+                groupe = "Cadets";
+            } else if (age >= 12) {
+                groupe = "Minimes";
+            } else if (age >= 10) {
+                groupe = "Benjamins";
+            } else if (age >= 8) {
+                groupe = "Poussins";
+            }
+
+
             const dateAdded = new Date();
             const insertId = await new Promise((resolve, reject) => {
                 const query = "INSERT INTO names (name, date_added, age, groupe) VALUES (?,?,?,?);";
 
-                connection.query(query, [name, dateAdded, age, groupe] , (err, result) => {
+                connection.query(query, [name, dateAdded, age, groupe], (err, result) => {
                     if (err) reject(new Error(err.message));
                     resolve(result.insertId);
                 })
             });
             return {
-                id : insertId,
-                name : name,
-                dateAdded : dateAdded,
-                age : age,
-                groupe : groupe,
-                
+                id: insertId,
+                name: name,
+                dateAdded: dateAdded,
+                age: age,
+                groupe: groupe,
+
+            };
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async insertNewProf(nom, prenom) {
+
+        try {
+            const dateAdded = new Date();
+            const insertId = await new Promise((resolve, reject) => {
+                const query = "INSERT INTO prof (nom, prenom, date_added) VALUES (?,?,?);";
+
+                connection.query(query, [nom, prenom, dateAdded], (err, result) => {
+                    if (err) reject(new Error(err.message));
+                    resolve(result.insertId);
+                })
+            });
+            return {
+                id: insertId,
+                nom: nom,
+                prenom: prenom,
+                dateAdded: dateAdded,
+
+            };
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async insertNewCours(date, heuredebut, heurefin, id_prof, groupe) {
+
+        try {
+
+            const insertId = await new Promise((resolve, reject) => {
+                const query = "INSERT INTO `cours` ( `date`, `heuredebut`, `groupe`, `id_prof`, `heurefin`) VALUES  (?,?,?,?,?);";
+
+
+                connection.query(query, [date, heuredebut, heurefin, id_prof, groupe], (err, result) => {
+                    if (err) reject(new Error(err.message));
+                    resolve(result.insertId);
+                })
+            });
+            return {
+                id: insertId,
+                date: date,
+                heuredebut: heuredebut,
+                heurefin: heurefin,
+                id_prof: id_prof,
+                groupe: groupe,
+
             };
         } catch (error) {
             console.log(error);
@@ -84,16 +153,16 @@ class DbService {    // Contiens les fonctions qu'on utilisera pour GET/UPDATE/I
 
     async deleteRowById(id) {
         try {
-            id = parseInt(id, 10); 
+            id = parseInt(id, 10);
             const response = await new Promise((resolve, reject) => {
                 const query = "DELETE FROM names WHERE id = ?";
-    
-                connection.query(query, [id] , (err, result) => {
+
+                connection.query(query, [id], (err, result) => {
                     if (err) reject(new Error(err.message));
                     resolve(result.affectedRows);
                 })
             });
-    
+
             return response === 1 ? true : false;
         } catch (error) {
             console.log(error);
@@ -103,16 +172,16 @@ class DbService {    // Contiens les fonctions qu'on utilisera pour GET/UPDATE/I
 
     async updateNameById(id, name) {
         try {
-            id = parseInt(id, 10); 
+            id = parseInt(id, 10);
             const response = await new Promise((resolve, reject) => {
                 const query = "UPDATE names SET name = ? WHERE id = ?";
-    
-                connection.query(query, [name, id] , (err, result) => {
+
+                connection.query(query, [name, id], (err, result) => {
                     if (err) reject(new Error(err.message));
                     resolve(result.affectedRows);
                 })
             });
-    
+
             return response === 1 ? true : false;
         } catch (error) {
             console.log(error);
@@ -123,9 +192,9 @@ class DbService {    // Contiens les fonctions qu'on utilisera pour GET/UPDATE/I
     async searchByName(name) {
         try {
             const response = await new Promise((resolve, reject) => {
-                const query = "SELECT * FROM names WHERE name = ?;";
+                const query = "SELECT * FROM names WHERE name like '%?%' or age like '%?%' or date_added like '%?%' or groupe like '%?%';";
 
-                connection.query(query, [name], (err, results) => {
+                connection.query(query, [name, name, name, name], (err, results) => {
                     if (err) reject(new Error(err.message));
                     resolve(results);
                 })
@@ -136,8 +205,10 @@ class DbService {    // Contiens les fonctions qu'on utilisera pour GET/UPDATE/I
             console.log(error);
         }
     }
-    
-    
+
+
+
+
 }
 
 module.exports = DbService;

@@ -1,8 +1,5 @@
-
-
-
 document.addEventListener('DOMContentLoaded', function () {
-    fetch('http://localhost:5000/getAll')
+    fetch('http://localhost:5000/getAlla')
     .then(response => response.json())
     .then(data => loadHTMLTable(data['data']));
     
@@ -17,16 +14,25 @@ document.querySelector('table tbody').addEventListener('click', function(event) 
     }
 });
 
-const updateBtn = document.querySelector('#update-row-btn');
+
 const searchBtn = document.querySelector('#search-btn');
 
 searchBtn.onclick = function() {
+    const typerecherche = document.querySelector('#typerecherche').value;
     const searchValue = document.querySelector('#search-input').value;
+    if (typerecherche == 1) {
+        fetch('http://localhost:5000/searchn/' + searchValue)
+        .then(response => response.json())
+        .then(data => loadHTMLTable(data['data']));
+    } else {
+        fetch('http://localhost:5000/searchg/' + searchValue)
+        .then(response => response.json())
+        .then(data => loadHTMLTable(data['data']));
+    }
 
-    fetch('http://localhost:5000/search/' + searchValue)
-    .then(response => response.json())
-    .then(data => loadHTMLTable(data['data']));
-}
+};
+const updateBtn = document.querySelector('#update-row-btn');
+
 
 function deleteRowById(id) {
     fetch('http://localhost:5000/delete/' + id, {
@@ -67,36 +73,9 @@ updateBtn.onclick = function() {
         if (data.success) {
             location.reload();
         }
-    })
-}
+    });
+};
 
-
-const addBtn = document.querySelector('#add-name-btn');
-
-addBtn.onclick = function () {       // Action du bouton Ajouter // 
-    const nameInput = document.querySelector('#name-input');
-    const ageInput  = document.querySelector('#age-input');
-    
-    const name = nameInput.value;
-    const age = ageInput.value;
-   
-    nameInput.value = "";
-    ageInput.value  = "";
-    console.log(nameInput.value);
-
-    fetch('http://localhost:5000/insert', { // Envoie les données au backend // 
-        headers: {
-            'Content-type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify({ name : name, age : age})
-        
-        
-    })
-    .then(response => response.json())
-    .then(data => insertRowIntoTable(data['data']));
-    
-}
 
 function insertRowIntoTable(data) {
     
@@ -152,4 +131,3 @@ function loadHTMLTable(data) {
     table.innerHTML = tableHtml;
     
 }
-

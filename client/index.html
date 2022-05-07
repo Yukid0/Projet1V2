@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="stylesheet.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.js" integrity="sha256-2JRzNxMJiS0aHOJjG+liqsEOuBb6++9cY4dSOyiijX4=" crossorigin="anonymous"></script>
-    <title>Home</title>
+    <link rel="stylesheet" href="css/stylesheet.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Mukta:wght@300;400;600;700;800&family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <title>Adhérents</title>
 </head>
 <body>
     <nav>
@@ -13,39 +13,47 @@
            M2L
         </div>
         <ul>
-           <li><a class="active" href="index.html">Ajouter</a></li>
-           <li><a href="adherents.html">Adhérents</a></li>
-           <li><a href="groupes.html">Groupes</a></li>
-           <li><a href="planning.html">Planning</a></li>
-           <li><a href="https://www.google.com/">Déconnexion</a></li>
+           
+            <li><a class="active" href="index.html">Adhérents</a></li>
+            <li><a href="prof.html">Prof</a></li>
+            <li><a href="planning.html">Planning</a></li>
+            <li><a href="https://www.google.com/">Déconnexion</a></li>
         </ul>
      </nav>
      
     <main>
-        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br>
         <div class="container">
+            <select id="typerecherche">
+                <option value="1">par Nom</option>
+                <option value="2">par Groupe</option>
+            </select>
+            <div class="inputs">
+                <div>
+                    
+                    <input type="text" id="search-input" required>
+                    <label>Chercher</label>
+                    
+                   
+                    <hr style="height:10px; visibility:hidden;" />
+                    <button class="button button-2" id="search-btn">Chercher</button>
+                    
+                 </div>
+            </div>
             
-            <div class="inputs">
-                
-                <input type="text" id="name-input" required>
-                <label>Prénom</label>
-            </div>
-            <div class="inputs">
-                <input type="text" id="age-input" required>
-                <label>Age</label>
-            </div>
-            <button class="button button-2" id="add-name-btn">Ajouter Adhérent</button>
+            
         </div>
-        <section hidden id="sneaky">
-        <br><br>
-        <br><br><br><br><br><br><br><br>
+
+        
+       <a href="ajouteradherents.html" class="btn-grad">Ajouter un Adhérent</a>
+        
 
         <table id="table">
             <thead>
-                
                 <th>Nom</th>
+                <th>Groupe</th>
                 <th>Date d'Ajout</th>
-                <th>age</th>
+                <th>Age</th>
                 <th>Supprimer</th>
                 <th>Modifier</th>
             </thead>
@@ -53,14 +61,19 @@
         </table>
 
         <section hidden id="update-row">
-            <label>Nom:</label>
-            <input type="text" id="update-name-input">
-            <button class="button button-2" id="update-row-btn">Modifier</button>
+            <div class="container">
+                <div class="inputs">
+                    <input type="text" id="update-name-input" required>
+                    <label>Nom</label>
+                    <hr style="height:10px; visibility:hidden;" />
+                    <button class="button button-2" id="update-row-btn">Modifier</button>
+                </div>
+            </div>
         </section>
-        </section>  
+        <br>
     </main>
     <script src="index.js"></script>
-    <br>
+    <br><br><br><br><br><br><br>
     <footer>
         <div class="footer-bottom">
             <p>copyright &copy;2022  </p>
