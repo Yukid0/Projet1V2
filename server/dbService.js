@@ -58,6 +58,23 @@ class DbService {    // Contiens les fonctions qu'on utilisera pour GET/UPDATE/I
         }
     }
 
+    async getAllCData() {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = "SELECT * FROM cours;";
+
+                connection.query(query, (err, results) => {
+                    if (err) reject(new Error(err.message));
+                    resolve(results);
+                })
+            });
+            // console.log(response);
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
 
     async insertNewAdherent(name, age) {
         console.log('toto');
@@ -125,27 +142,17 @@ class DbService {    // Contiens les fonctions qu'on utilisera pour GET/UPDATE/I
     }
 
     async insertNewCours(date, heuredebut, heurefin, id_prof, groupe) {
-
         try {
+            let insertId;
+            const query = "INSERT INTO cours ( date, heuredebut, heurefin, id_prof, groupe) VALUES  (?,?,?,?,?);";
 
-            const insertId = await new Promise((resolve, reject) => {
-                const query = "INSERT INTO `cours` ( `date`, `heuredebut`, `groupe`, `id_prof`, `heurefin`) VALUES  (?,?,?,?,?);";
 
+            connection.query(query, [date, heuredebut, heurefin, id_prof, groupe], (err, result) => {
+                if (err)
+                    console.log(err.message);
+                insertId = result.insertId;
+            })
 
-                connection.query(query, [date, heuredebut, heurefin, id_prof, groupe], (err, result) => {
-                    if (err) reject(new Error(err.message));
-                    resolve(result.insertId);
-                })
-            });
-            return {
-                id: insertId,
-                date: date,
-                heuredebut: heuredebut,
-                heurefin: heurefin,
-                id_prof: id_prof,
-                groupe: groupe,
-
-            };
         } catch (error) {
             console.log(error);
         }
@@ -192,9 +199,9 @@ class DbService {    // Contiens les fonctions qu'on utilisera pour GET/UPDATE/I
     async searchByName(name) {
         try {
             const response = await new Promise((resolve, reject) => {
-                const query = "SELECT * FROM names WHERE name like '%?%' or age like '%?%' or date_added like '%?%' or groupe like '%?%';";
+                const query = "SELECT * FROM names WHERE name = ?;";
 
-                connection.query(query, [name, name, name, name], (err, results) => {
+                connection.query(query, [name], (err, results) => {
                     if (err) reject(new Error(err.message));
                     resolve(results);
                 })
@@ -206,7 +213,22 @@ class DbService {    // Contiens les fonctions qu'on utilisera pour GET/UPDATE/I
         }
     }
 
+    async searchByGroupe(groupe) {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = "SELECT * FROM names WHERE groupe = ?;";
 
+                connection.query(query, [groupe], (err, results) => {
+                    if (err) reject(new Error(err.message));
+                    resolve(results);
+                })
+            });
+
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 
 }

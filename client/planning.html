@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/stylesheet.css">
-    
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    
+    <link rel="stylesheet" href="../Calendar.js-main/src/calendarjs.css" />
+    <script src="../Calendar.js-main/src/calendarjs.js"></script>
+
+
     <title>Planning</title>
 </head>
+
 <body>
     <nav>
         <div class="logo">
-           M2L
+            M2L
         </div>
         <ul>
             <li><a href="index.html">Adhérents</a></li>
@@ -21,15 +24,59 @@
             <li><a class="active" href="planning.html">Planning</a></li>
             <li><a href="https://www.google.com/">Déconnexion</a></li>
         </ul>
-        
-     </nav>
-     <a href="ajoutercours.html" class="btn-grad">Ajouter un cours</a>
-     <script src="index.js"></script>
-     <footer>
+
+    </nav>
+    <a href="ajoutercours.html" class="btn-grad">Ajouter un cours</a>
+
+    <div id="myCalendar">
+    </div>
+    <script src="index.js"></script>
+    <script>
+
+
+
+
+        // calendarJs(id, options, startDateTime)
+        var calendarInstance = new calendarJs("myCalendar", {
+            // options here
+        })
+        var events = [
+
+            // more events here
+        ];
+        fetch('http://localhost:5000/getAllc')
+            .then(response => response.json())
+            .then(data => {
+
+                let JSONdata = [{}];
+                JSONdata.fill(data);
+                console.log(JSONdata);
+                JSONdata.forEach((x) => {   // Retourne les données s'il y en a //
+                    events.push({
+                        from: x.date,
+                        to: x.date,
+                        title: x.groupe,
+                        description: x.groupe,
+                        location: "Practice",
+                        isAllDayEvent: true,
+                        color: "#FF0000",
+                        colorText: "#FFFF00",
+                        colorBorder: "#00FF00"
+                    })
+                })
+                console.log(events);
+            }
+
+            );
+        console.log(events);
+        calendarInstance.addEvents(events);
+    </script>
+    <footer>
         <div class="footer-bottom">
-            <p>copyright &copy;2022  </p>
+            <p>copyright &copy;2022 </p>
         </div>
     </footer>
-    
+
 </body>
+
 </html>

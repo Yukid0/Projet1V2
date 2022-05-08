@@ -45,8 +45,10 @@ app.post('/insertP', (request, response) => {
 
 
 });
-// create Cours
-app.post('/insertC2', (request, response) => {
+// create Cours 
+
+app.post('/insertC', (request, response) => {
+    console.log(request.body);
     const { date } = request.body;
     const { heuredebut } = request.body;
     const { heurefin } = request.body;
@@ -55,28 +57,11 @@ app.post('/insertC2', (request, response) => {
 
 
     const db = dbService.getDbServiceInstance();
-
-    const result = db.insertNewCours(heuredebut, heurefin, date, id_prof, groupe);
-
+    const result = db.insertNewCours(date, heuredebut, heurefin, id_prof, groupe);
 
     result
         .then(data => response.json({ data: data }))
         .catch(err => console.log(err));
-
-
-});
-
-app.post('/insertC', (request, response) => {
-
-    const { date } = request.body;
-    const { heuredebut } = request.body;
-    const { heurefin } = request.body;
-    const { id_prof } = request.body;
-    const { groupe } = request.body;
-
-
-    const db = dbService.getDbServiceInstance();
-    const result = db.insertNewCours(heuredebut, heurefin, date, id_prof, groupe);
 
 
 });
@@ -151,7 +136,7 @@ app.get('/searchg/:groupe', (request, response) => {
     const { groupe } = request.params;
     const db = dbService.getDbServiceInstance();
 
-    const result = db.searchByName(groupe);
+    const result = db.searchByGroupe(groupe);
 
     result
         .then(data => response.json({ data: data }))
